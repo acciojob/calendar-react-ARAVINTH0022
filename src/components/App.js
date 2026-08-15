@@ -59,11 +59,14 @@ const App = () => {
 
   const handleMonthChange = (e) => {
     const val = e.target.value;
-    const selected = MONTHS.indexOf(val);
-    if (selected !== -1) {
-      setMonthIndex(selected);
-    } else if (!isNaN(val)) {
-      setMonthIndex(parseInt(val, 10));
+    if (MONTHS.includes(val)) {
+      setMonthIndex(MONTHS.indexOf(val));
+    } else {
+      const num = parseInt(val, 10);
+      if (!isNaN(num)) {
+        if (num >= 0 && num < 12) setMonthIndex(num);
+        else if (num >= 1 && num <= 12) setMonthIndex(num - 1);
+      }
     }
   };
 
@@ -98,12 +101,11 @@ const App = () => {
 
   return (
     <div id="main">
-      <h1 id="heading" className="header">Calendar</h1>
+      <h1 id="heading">Calendar</h1>
 
       <div className="controls" style={{ marginBottom: "15px" }}>
         <select
           id="month"
-          className="month-select"
           value={MONTHS[monthIndex]}
           onChange={handleMonthChange}
         >
@@ -130,7 +132,6 @@ const App = () => {
         ) : (
           <span
             id="year"
-            className="year-val"
             onDoubleClick={() => {
               setYearInput(year.toString());
               setIsEditingYear(true);
